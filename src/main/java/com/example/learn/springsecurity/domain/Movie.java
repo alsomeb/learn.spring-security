@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class Movie {
-    private String id;
+    private int id;
     private String name;
     private LocalDate releaseYear;
 }

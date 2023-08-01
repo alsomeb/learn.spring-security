@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class User {
-    private String id;
+    private int id;
     private String username;
     private String email;
     private List<Movie> watchList;

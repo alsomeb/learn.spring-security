@@ -29,6 +29,7 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 
 ### Spring Boot App
 
+- If using Intellij you can set env vars in `Run/Debug Configurations`
 - Run in IDE or however you want
 
 ## Endpoints (APIs)
