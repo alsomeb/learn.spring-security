@@ -1,0 +1,28 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: pgdb
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "exit" ]
+      interval: 20s # kommer slänga första health_check efter 20 sec, kan jag anv cmd shell i den -> exit cmd
+      timeout: 30s
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8888:8080
+    depends_on:
+      db:
+        condition: service_healthy # väntar med att kicka igång adminer tills DB har OK healthcheck, bara för skojs skull
