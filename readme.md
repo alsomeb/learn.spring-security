@@ -21,10 +21,15 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 
 ## Installation
 
+### DB
 - Clone the repository
 - Create a .env file in the root folder with PG_USER and PG_PASSWORD (for docker compose)
 - Run the following command in the terminal: `docker compose up -d`
 - Ensure that you have the same environment variables in the application.yml
+
+### Spring Boot App
+
+- Run in IDE or however you want
 
 ## Endpoints (APIs)
 
