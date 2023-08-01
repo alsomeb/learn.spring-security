@@ -31,24 +31,45 @@ public class UserDaoImpl implements UserDao {
                 .build());
     }
 
+    /*
+        I could have used JDBC's provided BeanPropertyRowMapper but query() handles my Optional Problem here.
+
+        It automatically maps the columns in the ResultSet to properties in the Java object based on their names, using JavaBean property conventions
+        e.g., for a column named "firstName," it will look for a property "firstName" in the Java class and map the value accordingly
+
+        Using Custom lambda: (rs, rowNum) ->
+        This approach gives you more flexibility because you can explicitly define how the mapping should be done. 
+        In summary, if you need more control over the mapping process or want to handle complex scenarios, defining a custom lambda allows you to tailor the mapping to your needs.
+
+        Syntax BeanPropertyRowMapper:
+        springJdbcTemplate.queryForObject(sql,
+                new BeanPropertyRowMapper<>(User.class), id);
+    */
     @Override
     public Optional<User> findUserById(int userId) {
         String sql = "SELECT id, username, email FROM users WHERE id = ?";
 
-        // eftersom vi får tbx en lista med resultat, men kommer alltid ba finnas max 1
+        // Using query() method to return a list of results ( we only expect it to have a length of 1 )
         List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> User.builder()
                 .id(rs.getInt("id"))
                 .username(rs.getString("username"))
                 .email(rs.getString("email"))
                 .build(), userId);
 
+        // Check if the list is NOT empty
         if(!users.isEmpty()) {
+            // Since we expect only one user with the given userId, we return the first (and only) element
             User user = users.get(0);
+
+             // Load the watchlist for the user
             List<Movie> watchList = userMovieDao.findMoviesByUser(user.getId());
             user.setWatchList(watchList);
+
+            // Return the user wrapped in Optional
             return Optional.of(user);
         }
 
+        // Return Optional.empty() when no user is found
         return Optional.empty();
     }
 }
