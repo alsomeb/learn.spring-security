@@ -8,6 +8,7 @@ import com.example.learn.springsecurity.repositories.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -20,14 +21,26 @@ public class UserRepositoryImpl implements UserRepository {
         this.userMovieDao = userMovieDao;
     }
 
+    // Might need watch list mapped to every user later
+    // and better using helper method instead of writing all inside lambda
     @Override
     public List<User> listUsers() {
         return userDao.listUsers().stream()
-                .map(user -> setWatchListForUser(user)) // better using helper method instead of writing all inside lambda
+                .map(user -> setWatchListForUser(user))
                 .collect(Collectors.toList());
     }
 
-    // helpers
+    @Override
+    public Optional<User> findUserById(int id) {
+        return userDao.findUserById(id);
+    }
+
+    @Override
+    public List<Movie> findMoviesByUserId(int userId) {
+        return userMovieDao.findMoviesByUser(userId);
+    }
+
+    // helper methods
     private User setWatchListForUser(User user) {
         List<Movie> watchList = userMovieDao.findMoviesByUser(user.getId());
         user.setWatchList(watchList);

@@ -16,6 +16,10 @@ public class UserMovieDaoImpl implements UserMovieDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /*
+        RowMapper to map the result set to Movie objects.
+        If there are no rows in the result set, the RowMapper will not be invoked, and hence, an empty list will be returned.
+     */
     @Override
     public List<Movie> findMoviesByUser(int userId) {
         String sql = "SELECT m.id, m.name, m.release_year FROM movies m " +

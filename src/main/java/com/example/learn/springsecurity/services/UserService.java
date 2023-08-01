@@ -1,9 +1,12 @@
 package com.example.learn.springsecurity.services;
 
-import com.example.learn.springsecurity.domain.User;
+import com.example.learn.springsecurity.dto.MovieDTO;
+import com.example.learn.springsecurity.dto.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> listUsers();
+    List<UserDTO> listUsers();
+    List<MovieDTO> findMoviesByUser(int userId);
+    UserDTO findUserById(int userId);
 }

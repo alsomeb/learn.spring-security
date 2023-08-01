@@ -13,7 +13,8 @@ VALUES
     ('DanielTaylor', 'daniel.taylor@example.com'),
     ('SophiaMartinez', 'sophia.martinez@example.com'),
     ('WilliamAnderson', 'william.anderson@example.com'),
-    ('IsabellaThomas', 'isabella.thomas@example.com');
+    ('IsabellaThomas', 'isabella.thomas@example.com'),
+    ('Alsomeb', 'alex@gmail.com');
 
 -- Seed movies
 INSERT INTO movies (name, release_year)
