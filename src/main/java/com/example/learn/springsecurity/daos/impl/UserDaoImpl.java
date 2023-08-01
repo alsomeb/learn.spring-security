@@ -32,7 +32,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     /*
-        I could have used JDBC's provided BeanPropertyRowMapper but query() handles my Optional Problem here.
+        I could have used queryForObject() with JDBC's provided BeanPropertyRowMapper
+        In my case, query() avoids the EmptyResultDataAccessException when UserID has NO MATCH in DB but I handle this in another layer with UserNotFoundException 404
 
         It automatically maps the columns in the ResultSet to properties in the Java object based on their names, using JavaBean property conventions
         e.g., for a column named "firstName," it will look for a property "firstName" in the Java class and map the value accordingly
