@@ -19,6 +19,11 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 - Local Postgres DB and Adminer as the DB manager
 - User and Movie entities with a Many-to-Many relationship
 
+## Project Structure
+
+- Trying to follow best practices and organizing my code into different layers (DAOs, Repositories, Services, DTOs, etc)
+- Its alot for a small project but a good learning experience for design patterns
+
 ## Installation
 
 ### DB
@@ -34,7 +39,14 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 
 ## Endpoints (APIs)
 
--  TBD
+### Users
+- ../api/users -> All users in db
+- ../api/users/{id} -> User by id
+- TBD
+
+### Movies
+
+- TBD
 
 ## Dependencies
 
