@@ -26,11 +26,6 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 - Run the following command in the terminal: `docker compose up -d`
 - Ensure that you have the same environment variables in the application.yml
 
-## Usage and Getting Started
-
-- Describe how to run the application and get started with development.
-- Mention any specific commands to build, run, or test the application.
-
 ## Endpoints (APIs)
 
 -  TBD
