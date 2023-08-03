@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO addUser(UserDTO userDTO) {
         // check if email exists else Throw Exception
-        String email = userDTO.getEmail().trim();
-        userRepository.findUserByEmail(email)
+        userDTO.setEmail(userDTO.getEmail().trim());
+        userRepository.findUserByEmail(userDTO.getEmail())
                 .ifPresent(u -> {
                     throw new UserEmailExistsException("Email exists already");
                 });

@@ -21,11 +21,14 @@ public class ErrorHandlingControllerAdvice {
     }
 
     // Handle any other Exception as 500 Internal server error
+    /*
     @ExceptionHandler
     public ProblemDetail handleException(Exception ex) {
-        String errorMsg = (ex.getMessage() != null) ? "An unexpected error occurred: " + ex.getMessage() : "An unexpected error occurred";
+        String errorMsg = (ex.getMessage() != null) ? "Error occurred: " + ex.getMessage() : "An unexpected error occurred";
 
         return ProblemDetail
                 .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred: " + errorMsg);
     }
+
+     */
 }
