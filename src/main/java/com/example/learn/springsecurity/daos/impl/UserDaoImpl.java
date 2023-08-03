@@ -59,12 +59,48 @@ public class UserDaoImpl implements UserDao {
                 .email(rs.getString("email"))
                 .build(), userId);
 
-        // Check if the list is NOT empty
-        if(!users.isEmpty()) {
-            // Since we expect only one user with the given userId, we return the first (and only) element
-            User user = users.get(0);
+        return loadUserData(users);
+    }
 
-             // Load the watchlist for the user
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        String sql = """
+                SELECT id, username, email
+                FROM users
+                WHERE email = ?
+                """;
+
+        List<User> result = jdbcTemplate.query(sql, (rs, rowNum) -> User.builder()
+                .id(rs.getInt("id"))
+                .username(rs.getString("username"))
+                .email(rs.getString("email"))
+                .build(), email);
+
+        return loadUserData(result);
+    }
+
+    @Override
+    public boolean addUser(User user) {
+        String sql = """
+                INSERT INTO users (username, email)
+                VALUES (?, ?);
+                """;
+
+        int rowsAffected = jdbcTemplate.update(sql,
+                user.getUsername(),
+                user.getEmail());
+
+        return rowsAffected > 0; // if bigger than 0, insert operation was successful
+    }
+
+    // Helpers
+    private Optional<User> loadUserData(List<User> resultFromSql) {
+        // Check if the list is NOT empty
+        if(!resultFromSql.isEmpty()) {
+            // Since we expect only one user with the given userId, we return the first (and only) element
+            User user = resultFromSql.get(0);
+
+            // Load the watchlist for the user
             List<Movie> watchList = userMovieDao.findMoviesByUser(user.getId());
             user.setWatchList(watchList);
 
@@ -72,7 +108,6 @@ public class UserDaoImpl implements UserDao {
             return Optional.of(user);
         }
 
-        // Return Optional.empty() when no user is found
         return Optional.empty();
     }
 }

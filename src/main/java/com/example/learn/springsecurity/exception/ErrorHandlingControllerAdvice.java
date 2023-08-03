@@ -13,4 +13,19 @@ public class ErrorHandlingControllerAdvice {
         return ProblemDetail
                 .forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+
+    @ExceptionHandler
+    public ProblemDetail handle(UserEmailExistsException ex) {
+        return ProblemDetail
+                .forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    // Handle any other Exception as 500 Internal server error
+    @ExceptionHandler
+    public ProblemDetail handleException(Exception ex) {
+        String errorMsg = (ex.getMessage() != null) ? "An unexpected error occurred: " + ex.getMessage() : "An unexpected error occurred";
+
+        return ProblemDetail
+                .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred: " + errorMsg);
+    }
 }

@@ -6,10 +6,7 @@ import com.example.learn.springsecurity.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,7 +37,13 @@ public class UserController {
     @GetMapping("{id}/movies")
     public ResponseEntity<List<MovieDTO>> findMoviesById(@PathVariable int id) {
         List<MovieDTO> movies = userService.findMoviesByUser(id);
-        log.info("GET Movies By User Id: {}", movies);
+        log.info("GET Movies By User Id: {}", id);
         return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
+        log.info("POST new User");
+        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
     }
 }

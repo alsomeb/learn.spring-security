@@ -36,8 +36,29 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findUserByEmail(String email) {
+        return userDao.findUserByEmail(email);
+    }
+
+    @Override
     public List<Movie> findMoviesByUserId(int userId) {
         return userMovieDao.findMoviesByUser(userId);
+    }
+
+    /*
+        Using Optional in this scenario is a clean and idiomatic way to handle the possibility of a user not being inserted into the database.
+        It allows the calling code in the service layer to use orElse, orElseThrow, or other methods to handle the different cases gracefully.
+     */
+    @Override
+    public Optional<User> addUser(User user) {
+        boolean wasInserted = userDao.addUser(user);
+        if (wasInserted) {
+            // returns Optional of User persisted to db
+            return userDao.findUserByEmail(user.getEmail());
+        }
+
+        // Returns Optional Empty
+        return Optional.empty();
     }
 
     // helper methods

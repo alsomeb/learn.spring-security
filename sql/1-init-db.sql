@@ -12,7 +12,7 @@ CREATE TABLE movies (
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL
+    email VARCHAR(255) NOT NULL UNIQUE -- only 1 email / User
 );
 
 -- Create the user_movie association table for Many-to-Many relationship

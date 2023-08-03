@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface UserDao {
     List<User> listUsers();
     Optional<User> findUserById(int userId);
+    Optional<User> findUserByEmail(String email);
+    boolean addUser(User user);
 }

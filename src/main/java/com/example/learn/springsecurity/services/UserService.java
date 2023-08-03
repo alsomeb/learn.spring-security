@@ -9,4 +9,5 @@ public interface UserService {
     List<UserDTO> listUsers();
     List<MovieDTO> findMoviesByUser(int userId);
     UserDTO findUserById(int userId);
+    UserDTO addUser(UserDTO userDTO);
 }
