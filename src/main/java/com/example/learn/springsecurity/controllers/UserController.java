@@ -1,5 +1,6 @@
 package com.example.learn.springsecurity.controllers;
 
+import com.example.learn.springsecurity.dto.MovieDTO;
 import com.example.learn.springsecurity.dto.UserDTO;
 import com.example.learn.springsecurity.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +35,12 @@ public class UserController {
         var userDTO = userService.findUserById(id);
         log.info("GET by userID: {}", userDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/movies")
+    public ResponseEntity<List<MovieDTO>> findMoviesById(@PathVariable int id) {
+        List<MovieDTO> movies = userService.findMoviesByUser(id);
+        log.info("GET Movies By User Id: {}", movies);
+        return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 }

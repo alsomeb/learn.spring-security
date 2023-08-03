@@ -1,5 +1,6 @@
 package com.example.learn.springsecurity.services.impl;
 
+import com.example.learn.springsecurity.domain.User;
 import com.example.learn.springsecurity.dto.MovieDTO;
 import com.example.learn.springsecurity.dto.UserDTO;
 import com.example.learn.springsecurity.exception.UserNotFoundException;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-// Todo Maybe Use DTO in future
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,16 +29,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<MovieDTO> findMoviesByUser(int userId) {
-        return userRepository.findMoviesByUserId(userId).stream()
+        // Check if user exists first
+        var matchUser = fetchUserEntityByIdOrElseThrowNotFound(userId);
+
+        return userRepository.findMoviesByUserId(matchUser.getId()).stream()
                 .map(movie -> MovieDTO.toDTO(movie))
                 .collect(Collectors.toList());
     }
 
     @Override
     public UserDTO findUserById(int userId) {
-        var userEntity = userRepository.findUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user with id " + userId));
+        var userEntity = fetchUserEntityByIdOrElseThrowNotFound(userId);
 
         return UserDTO.toDTO(userEntity);
+    }
+
+    // Helpers
+    private User fetchUserEntityByIdOrElseThrowNotFound(int id) {
+        return userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException("No user with id " + id));
     }
 }
