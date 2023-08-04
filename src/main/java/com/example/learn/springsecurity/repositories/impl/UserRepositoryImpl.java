@@ -61,6 +61,15 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<User> updateUser(User user) {
+        boolean wasInserted = userDao.updateUser(user); // sets columns email and username, even though not change will overwrite and save.
+        if(wasInserted)
+            return userDao.findUserById(user.getId()); // returns the updated user by finding it by id
+
+        return Optional.empty(); // Empty optional if no update was done
+    }
+
     // helper methods
     private User setWatchListForUser(User user) {
         List<Movie> watchList = userMovieDao.findMoviesByUser(user.getId());

@@ -93,6 +93,19 @@ public class UserDaoImpl implements UserDao {
         return rowsAffected > 0; // if bigger than 0, insert operation was successful
     }
 
+
+    @Override
+    public boolean updateUser(User user) {
+        String sql = """
+                UPDATE users
+                SET username = ?,
+                    email = ?
+                WHERE id = ?;
+                """;
+        int rowsAffected = jdbcTemplate.update(sql, user.getUsername(), user.getEmail(), user.getId());
+        return rowsAffected > 0;
+    }
+
     // Helpers
     private Optional<User> loadUserData(List<User> resultFromSql) {
         // Check if the list is NOT empty

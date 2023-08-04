@@ -20,6 +20,21 @@ public class ErrorHandlingControllerAdvice {
                 .forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    /*
+    User Database Related Errors
+    - The database server is offline or unreachable.
+    - Connection issues to the database.
+    - SQL query errors or syntax issues.
+    - Issues with the database schema (e.g., missing table, column).
+    - Deadlocks or concurrency issues in the database.
+    - Any other unexpected errors that occur during database operations.
+     */
+    @ExceptionHandler
+    public ProblemDetail handle(UserDatabaseOperationException ex) {
+        return ProblemDetail
+                .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
     // Handle any other Exception as 500 Internal server error
     /*
     @ExceptionHandler
