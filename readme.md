@@ -37,16 +37,23 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 - If using Intellij you can set env vars in `Run/Debug Configurations`
 - Run in IDE or however you want
 
-## Endpoints (APIs)
+## Endpoints (APIs) (Under Construction)
+
+### OpenAPI Swagger Documentation
+- To be added when all endpoints are done
 
 ### Users
-- ../api/users -> All users in db
-- ../api/users/{id} -> User by id
-- TBD
+- GET ../api/users -> <strong>All users in db</strong>
+- GET ../api/users/{id} -> <strong>User by id</strong>
+- GET ../api/users/{id}/movies -> <strong>Movie list By User Id</strong>
+- POST ../api/users -> <strong>ex payload {"username":"test", "email": "test@test.com"}</strong>
+- PUT ../api/users/{id} -> <strong>dynamic payload use both props or the one you want to update on resource</strong>
+
+<em>If email exist in DB you will receive 400 and 'Email already exists'</em>
 
 ### Movies
 
-- TBD
+- TBD, planning simple CRUD of Movie Resources
 
 ## Dependencies
 
