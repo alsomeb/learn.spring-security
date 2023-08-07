@@ -4,6 +4,8 @@ spring:
     url: "jdbc:postgresql://localhost:5432/moviedb"
     username: ${PG_USER}
     password: ${PG_PASSWORD}
+
+ # Dummy Spring Security settings
   security:
     user:
       name: dummy
