@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.sql.DataSource;
 
 /*
-    This is the config for Http Basic Auth.
+    This is the config for Http Basic Auth. Learning purpose
  */
 @Configuration
 @EnableWebSecurity
