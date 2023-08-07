@@ -1,0 +1,7 @@
+# For testing spring security stuff with another DB, h2 in mem
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  h2:
+    console:
+      enabled: true

@@ -1,12 +1,3 @@
 spring:
-  datasource:
-    driver-class-name: "org.postgresql.Driver"
-    url: "jdbc:postgresql://localhost:5432/moviedb"
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
-
- # Dummy Spring Security settings
-  security:
-    user:
-      name: dummy
-      password: dummy
+  profiles:
+    active: h2
