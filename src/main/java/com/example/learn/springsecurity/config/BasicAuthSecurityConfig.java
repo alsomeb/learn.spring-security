@@ -79,7 +79,8 @@ public class BasicAuthSecurityConfig {
                 .roles("ADMIN", "USER")
                 .build();
 
-        // Create UserDetailsManager + insert 2 users
+        // Create UserDetailsManager (Provides CRUD operations for both users and groups.)
+        // Insert 2 users
         var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.createUser(user);
         jdbcUserDetailsManager.createUser(user2);
