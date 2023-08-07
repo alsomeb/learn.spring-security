@@ -89,7 +89,7 @@ public class BasicAuthSecurityConfig {
 
 
     /*
-        Execute DDL script at start up, path is available in JdbcDaoImpl static variable
+        Execute DDL script at start up, path to DDL script is available in JdbcDaoImpl static variable
      */
     @Bean
     public DataSource dataSource() {
