@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
+// This one is used for PostGres JDBC API and not H2 used in BasicAuthSecConfig
+/*
 @Configuration
 public class DataSourceConfig {
 
@@ -14,3 +16,4 @@ public class DataSourceConfig {
         return new JdbcTemplate(dataSource);
     }
 }
+*/
