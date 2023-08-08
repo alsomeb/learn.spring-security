@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -46,7 +47,6 @@ public class BasicAuthSecurityConfig {
 
     /*
         Storing in memory user details
-        UserDetailsService is Core interface which loads user-specific data
         InMemoryUSerDetailsManger is a non-persistent impl of UserDetailsManger (for testing purposes)
      */
     /*
@@ -66,16 +66,21 @@ public class BasicAuthSecurityConfig {
     }
      */
 
-    // Storing in H2 Mem DB, dataSource bean will be injected
+    /*
+     Storing in H2 Mem DB, dataSource bean will be injected
+     UserDetailsService is Core interface which loads user-specific data
+     */
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         var user = User.withUsername("tester")
-                .password("{noop}tester") // no password encrypt == {noop}
+                .password("tester")
+                .passwordEncoder(str -> passwordEncoder().encode(str))
                 .roles("USER")
                 .build();
 
         var user2 = User.withUsername("alex")
-                .password("{noop}alex") // no password encrypt == {noop}
+                .password("alex")
+                .passwordEncoder(str -> passwordEncoder().encode(str))
                 .roles("ADMIN", "USER")
                 .build();
 
@@ -98,5 +103,15 @@ public class BasicAuthSecurityConfig {
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
                 .build();
+    }
+
+    /*
+     Password Hash
+     Clients can optionally supply a "version" ($2a, $2b, $2y) and a "strength" (a.k.a. log rounds in BCrypt) and a SecureRandom instance.
+     The larger the strength parameter the more work will have to be done (exponentially) to hash the passwords. The default value is 10.
+     */
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
