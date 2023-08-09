@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This project aims to explore Spring Security fundamentals, covering topics such as authentication, authorization, Spring Security Filter Chain, Basic Auth (might not be in repo at the end since I'll use JWT), JWT tokens, possibly touch on OAuth and using JDBC API since I have not used it before.
+This project aims to explore Spring Security fundamentals, covering topics such as authentication, authorization, Spring Security Filter Chain, Basic Auth (might not be in repo at the end since I'll use JWT), JWT tokens and oAuth2 Resource server and using JDBC API since I have not used it before.
 
 ## Project Goals
 
@@ -11,7 +11,7 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 - Spring Security Filter Chain
 - Basic Auth (might not be in repo at the end since I'll use JWT)
 - JWT tokens
-- Maybe touch on OAuth, we will see.
+- OAuth2 Resource server
 - For the first time try out JDBC API instead of JPA and learn DAO pattern, etc.
 
 ## Datasource and Domain
