@@ -83,7 +83,7 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void testThatfindUserByIdGeneratesCorrectSQL() {
+    public void testThatFindUserByIdGeneratesCorrectSQL() {
         String sql = "SELECT id, username, email FROM users WHERE id = ?";
         int id = 5;
         underTest.findUserById(id);
@@ -92,5 +92,44 @@ public class UserDaoImplTest {
                 any(RowMapper.class),
                 eq(id)
         );
+    }
+
+    @Test
+    public void testThatFindUserByEmailGeneratesCorrectSQL() {
+        // var försiktig med """ och "", kan faila tester.
+        String sql = """
+                SELECT id, username, email
+                FROM users
+                WHERE email = ?
+                """;
+
+        String email = "tester@tester.com";
+
+        underTest.findUserByEmail(email);
+        verify(template).query(
+                eq(sql),
+                any(RowMapper.class),
+                eq(email)
+        );
+    }
+
+    @Test
+    public void testThatUpdateUserGeneratesCorrectSQL() {
+        String sql = """
+                UPDATE users
+                SET username = ?,
+                    email = ?
+                WHERE id = ?;
+                """;
+
+        User user = User.builder()
+                .id(1)
+                .username("tester")
+                .email("tester@tester.com")
+                .build();
+
+        underTest.updateUser(user);
+
+        verify(template).update(sql, user.getUsername(), user.getEmail(), user.getId());
     }
 }
