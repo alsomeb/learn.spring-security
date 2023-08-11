@@ -3,7 +3,7 @@
 
 -- Drop Tables If Exists
 DROP TABLE IF EXISTS 'movies';
-DROP TABLE IF EXISTS 'users';
+DROP TABLE IF EXISTS 'app_users';
 DROP TABLE IF EXISTS 'user_movie';
 
 -- Create the Movies table

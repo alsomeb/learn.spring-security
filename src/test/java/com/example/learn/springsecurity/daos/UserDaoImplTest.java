@@ -35,7 +35,7 @@ public class UserDaoImplTest {
     @Test
     public void testThatUserIsCreatedGeneratesCorrectSQL() {
         String expectedSQL = """
-                INSERT INTO users (username, email)
+                INSERT INTO app_users (username, email)
                 VALUES (?, ?);
                 """;
 
@@ -57,7 +57,7 @@ public class UserDaoImplTest {
     @Test
     public void testThatUserIsInserted() {
         String sql = """
-                INSERT INTO users (username, email)
+                INSERT INTO app_users (username, email)
                 VALUES (?, ?);
                 """;
 
@@ -77,14 +77,14 @@ public class UserDaoImplTest {
 
     @Test
     public void testThatListAllUsersGeneratesCorrectSQL() {
-        String expectedSQL = "SELECT id, username, email from users";
+        String expectedSQL = "SELECT id, username, email from app_users";
         underTest.listUsers();
         verify(template).query(eq(expectedSQL), any(RowMapper.class));
     }
 
     @Test
     public void testThatFindUserByIdGeneratesCorrectSQL() {
-        String sql = "SELECT id, username, email FROM users WHERE id = ?";
+        String sql = "SELECT id, username, email FROM app_users WHERE id = ?";
         int id = 5;
         underTest.findUserById(id);
         verify(template).query(
@@ -99,7 +99,7 @@ public class UserDaoImplTest {
         // var försiktig med """ och "", kan faila tester.
         String sql = """
                 SELECT id, username, email
-                FROM users
+                FROM app_users
                 WHERE email = ?
                 """;
 
@@ -116,7 +116,7 @@ public class UserDaoImplTest {
     @Test
     public void testThatUpdateUserGeneratesCorrectSQL() {
         String sql = """
-                UPDATE users
+                UPDATE app_users
                 SET username = ?,
                     email = ?
                 WHERE id = ?;

@@ -2,7 +2,7 @@
 \connect moviedb;
 
 -- Seed users, thanks CHAT GPT
-INSERT INTO users (username, email)
+INSERT INTO app_users (username, email)
 VALUES
     ('JohnDoe', 'john.doe@example.com'),
     ('JaneSmith', 'jane.smith@example.com'),
@@ -17,7 +17,7 @@ VALUES
     ('Alsomeb', 'alex@gmail.com');
 
 -- Seed movies
-INSERT INTO movies (name, release_year)
+INSERT INTO app_users (name, release_year)
 VALUES
     ('The Secret Garden', '2020-08-07'),
     ('Midnight in Paris', '2011-05-20'),

@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> listUsers() {
-        return jdbcTemplate.query("SELECT id, username, email from users", (rs, rowNum) -> User.builder()
+        return jdbcTemplate.query("SELECT id, username, email from app_users", (rs, rowNum) -> User.builder()
                 .id(rs.getInt("id"))
                 .username(rs.getString("username"))
                 .email(rs.getString("email"))
@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
     */
     @Override
     public Optional<User> findUserById(int userId) {
-        String sql = "SELECT id, username, email FROM users WHERE id = ?";
+        String sql = "SELECT id, username, email FROM app_users WHERE id = ?";
 
         // Using query() method to return a list of results ( we only expect it to have a length of 1 )
         List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> User.builder()
@@ -67,7 +67,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findUserByEmail(String email) {
         String sql = """
                 SELECT id, username, email
-                FROM users
+                FROM app_users
                 WHERE email = ?
                 """;
 
@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean addUser(User user) {
         String sql = """
-                INSERT INTO users (username, email)
+                INSERT INTO app_users (username, email)
                 VALUES (?, ?);
                 """;
 
@@ -98,7 +98,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean updateUser(User user) {
         String sql = """
-                UPDATE users
+                UPDATE app_users
                 SET username = ?,
                     email = ?
                 WHERE id = ?;
