@@ -61,6 +61,7 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 
 ## Testing
 
-- TBD, not the focus of this project
+- Not the focus of this project
+- Might be some Unit / IT tests
 
 
