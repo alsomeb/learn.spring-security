@@ -7,6 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -34,8 +37,12 @@ public class UserRepositoryIT {
         assert addedUser != null;
         int expectedId = addedUser.getId();
 
-        assertThat(addedUser.getId())
-                .isEqualTo(expectedId);
+        Optional<User> result = userRepository.findUserById(expectedId);
+
+        assertThat(result)
+                .isPresent();
+        assertThat(expectedId)
+                .isEqualTo(result.orElse(null).getId());
     }
 
     @Test
