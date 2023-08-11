@@ -1,7 +1,14 @@
-# For testing spring security stuff with another DB, h2 in mem
+# For testing spring security stuff with another DB, h2 in mem configured to Postgres Mode
+# h2 usually do all uppercase but postgres lowercase, we can change that in properties below
+# These settings is most like postgres
+
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=PostgresSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
   h2:
     console:
       enabled: true
+  sql:
+    init:
+      mode: always

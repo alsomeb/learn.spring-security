@@ -1,10 +1,15 @@
 -- Connect to the moviedb database
 \connect moviedb;
 
+-- Drop Tables If Exists
+DROP TABLE IF EXISTS 'movies';
+DROP TABLE IF EXISTS 'users';
+DROP TABLE IF EXISTS 'user_movie';
+
 -- Create the Movies table
 CREATE TABLE movies (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL, -- can use TEXT instead but lets keep varchar for now
     release_year DATE NOT NULL
 );
 
