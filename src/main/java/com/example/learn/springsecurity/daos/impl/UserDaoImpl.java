@@ -57,7 +57,8 @@ public class UserDaoImpl implements UserDao {
                 .id(rs.getInt("id"))
                 .username(rs.getString("username"))
                 .email(rs.getString("email"))
-                .build(), userId);
+                .build(),
+                userId); // userId to add to the param
 
         return loadUserData(users);
     }
