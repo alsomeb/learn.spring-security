@@ -1,6 +1,4 @@
 # For testing spring security stuff with another DB, h2 in mem configured to Postgres Mode
-# h2 usually do all uppercase but postgres lowercase, we can change that in properties below
-# These settings is most like postgres
 
 spring:
   datasource:
