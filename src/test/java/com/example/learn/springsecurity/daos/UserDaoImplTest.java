@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-// Writing a Unit test here instead of IT
+// Some Unit tests not 100% coverage
 // Mocking with Mockito
 // I want to make sure correct SQL is being fired
 
