@@ -55,9 +55,8 @@ public class JwtSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth")).permitAll() // auth url - open so ppl can login and gen JWT token
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS)).permitAll()
-                        // USING METHOD LEVEL SECURITY INSTEAD IN CONTROLLERS
-                        //.requestMatchers(AntPathRequestMatcher.antMatcher("/api/test/**")).hasAuthority("SCOPE_ROLE_ADMIN") // expects SCOPE_ROLE_... prefix
-                        //.requestMatchers(AntPathRequestMatcher.antMatcher("/api/users/**")).hasAuthority("SCOPE_ROLE_USER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/api/test/**")).hasAuthority("SCOPE_ROLE_ADMIN") // expects Authority SCOPE_ROLE_<AUTH> prefix
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/api/users/**")).hasAuthority("SCOPE_ROLE_USER")
                         .anyRequest()
                         .authenticated())
                 // Disable Http Session -> Making REST API Stateless
