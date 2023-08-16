@@ -32,14 +32,15 @@ public class JwtAuthResourceController {
          */
     @PostMapping
     public JwtResponse authenticate(Authentication authentication) {
-        //return authentication;
+        // attempt to auth passed authentication object
+        // Returns a fully populated Auth object incl Grant Authorities, if successful
         return new JwtResponse(createToken(authentication));
     }
 
 
 
     private String createToken(Authentication authentication) {
-        // We are gathering all the details from the Authentication Object
+        // We are gathering all the details from the Authentication Object to create the JWT Token
 
 
         // The JWT Claims Set is a JSON object representing the claims conveyed by a JSON Web Token.
@@ -48,7 +49,7 @@ public class JwtAuthResourceController {
         var claims = JwtClaimsSet.builder()
                 .issuer("self") // who has issued it, self issued
                 .issuedAt(Instant.now()) // when ?
-                .expiresAt(Instant.now().plusSeconds(60 * 30)) // Time When JWT expire
+                .expiresAt(Instant.now().plusSeconds(60 * 30)) // Time When JWT expire, 30 mins
                 .subject(authentication.getName()) // name of Principal
                 .claim("scope", createScope(authentication)) // What Authorities does he have? String Concat Separated with Space
                 .build();

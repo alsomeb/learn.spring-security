@@ -146,12 +146,14 @@ public class JwtSecurityConfig {
 
 
     /*
-        Execute DDL script at start up, path to DDL script is available in JdbcDaoImpl static variable
+        Execute DDL script at start up to get USERS and AUTHORITIES Tables
+        path to DDL script file is available in JdbcDaoImpl static variable
      */
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
+                // Denna ger = public static final String DEFAULT_USER_SCHEMA_DDL_LOCATION = "org/springframework/security/core/userdetails/jdbc/users.ddl";
                 .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
                 .build();
     }
