@@ -42,6 +42,9 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 ### OpenAPI Swagger Documentation
 - To be added when all endpoints are done
 
+### Auth JWT
+- TBD
+
 ### Users
 - GET ../api/users -> <strong>All users in db</strong>
 - GET ../api/users/{id} -> <strong>User by id</strong>
