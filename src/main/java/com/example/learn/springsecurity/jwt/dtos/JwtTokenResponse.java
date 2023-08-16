@@ -1,4 +1,4 @@
 package com.example.learn.springsecurity.jwt.dtos;
 
-public record JwtResponse(String token) {
+public record JwtTokenResponse(String token) {
 }

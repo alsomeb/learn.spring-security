@@ -43,7 +43,7 @@ This project aims to explore Spring Security fundamentals, covering topics such 
 - To be added when all endpoints are done
 
 ### Auth JWT
-- TBD
+- POST ../api/auth -> <strong>payload {"username":"tester", "password": "tester"}</strong>
 
 ### Users
 - GET ../api/users -> <strong>All users in db</strong>

@@ -7,9 +7,14 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,12 +23,14 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
@@ -33,12 +40,24 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity // Spring Security will recognize and apply the configurations you've defined in your JwtSecurityConfig class
+@EnableMethodSecurity
 public class JwtSecurityConfig {
 
+    /*
+        The OPTIONS request is a preflight request made by the browser to check whether the actual request is safe to send or not.
+        By permitting all OPTIONS requests, you're allowing the browser to perform the necessary CORS checks before making the actual request,
+        which helps to avoid the CORS error.
+
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth")).permitAll() // auth url - open so ppl can login and gen JWT token
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS)).permitAll()
+                        // USING METHOD LEVEL SECURITY INSTEAD IN CONTROLLERS
+                        //.requestMatchers(AntPathRequestMatcher.antMatcher("/api/test/**")).hasAuthority("SCOPE_ROLE_ADMIN") // expects SCOPE_ROLE_... prefix
+                        //.requestMatchers(AntPathRequestMatcher.antMatcher("/api/users/**")).hasAuthority("SCOPE_ROLE_USER")
                         .anyRequest()
                         .authenticated())
                 // Disable Http Session -> Making REST API Stateless
@@ -57,19 +76,29 @@ public class JwtSecurityConfig {
                 .build();
     }
 
+    /*
+    AuthenticationManager Bean
+    Construct a ProviderManager using the given AuthenticationProviders
+    */
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder); // Use same encoder for creating and authentication
+        return new ProviderManager(authProvider);
+    }
+
     // Converting a Checked ex to a runtime ex
     @Bean
     public KeyPair keyPair() {
-        KeyPairGenerator rsa;
         try {
-            rsa = KeyPairGenerator.getInstance("RSA");
+            var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            return keyPairGenerator.generateKeyPair();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Unable to generate an RSA Key Pair", e);
         }
-        rsa.initialize(2048);
-        return rsa.generateKeyPair();
     }
-
     // Create RSA KEY OBJECT USING KEYPAIR, autowired bean in the params
     @Bean
     public RSAKey rsaKeyObject(KeyPair keyPair) {
@@ -130,7 +159,7 @@ public class JwtSecurityConfig {
                 .build();
 
         var user2 = User.withUsername("alex")
-                .password("alex")
+                .password("alex") // Todo use {BCRYPT} hash here
                 .passwordEncoder(str -> passwordEncoder().encode(str))
                 .roles("ADMIN", "USER")
                 .build();
