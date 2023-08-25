@@ -1,5 +1,7 @@
 package com.example.learn.springsecurity.config;
 
+import com.example.learn.springsecurity.domain.CustomUser;
+import com.example.learn.springsecurity.services.CustomUserDetailsService;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -19,9 +21,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -36,6 +37,7 @@ import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration
@@ -75,10 +77,12 @@ public class JwtSecurityConfig {
                 .build();
     }
 
+
     /*
     AuthenticationManager Bean
     Construct a ProviderManager using the given AuthenticationProviders
     */
+    /*
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         var authProvider = new DaoAuthenticationProvider();
@@ -86,6 +90,17 @@ public class JwtSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // Use same encoder for creating and authentication
         return new ProviderManager(authProvider);
     }
+    */
+
+    // Using my own Custom UserDetailService which implements UDS
+    @Bean
+    public AuthenticationManager authenticationManager(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailsService); // custom UserDetailsService
+        authProvider.setPasswordEncoder(passwordEncoder); // Use the same encoder for creating and authenticating users
+        return new ProviderManager(authProvider);
+    }
+
 
     // Converting a Checked ex to a runtime ex
     @Bean
@@ -142,13 +157,11 @@ public class JwtSecurityConfig {
    }
 
 
-
-
-
     /*
  Storing in H2 Mem DB, dataSource bean will be injected
  UserDetailsService is Core interface which loads user-specific data
  */
+    /*
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         var user = User.withUsername("tester")
@@ -172,6 +185,45 @@ public class JwtSecurityConfig {
         return jdbcUserDetailsManager;
     }
 
+     */
+
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
+        // overriding queries to use my custom implementations
+        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT u.username, a.authority FROM custom_user u INNER JOIN authorities a ON u.id = a.user_id WHERE u.username = ?");
+        userDetailsManager.setCreateAuthoritySql(
+                "INSERT INTO authorities (user_id, authority) VALUES ((SELECT id FROM users WHERE username = ?), ?)"
+        );
+
+        return userDetailsManager;
+    }
+    @Bean
+    public UserDetailsService userDetailsService(JdbcUserDetailsManager jdbcUserDetailsManager, PasswordEncoder passwordEncoder) {
+        // Using Custom User impl
+
+        var adminUser = new CustomUser(
+                "admin",
+                passwordEncoder.encode("admin"),
+                List.of(
+                        new SimpleGrantedAuthority("ROLE_USER"),
+                        new SimpleGrantedAuthority("ROLE_ADMIN")
+                ));
+
+        var testUser = new CustomUser(
+                "tester",
+                passwordEncoder.encode("tester"),
+                List.of(
+                        new SimpleGrantedAuthority("ROLE_USER")
+                ));
+
+        jdbcUserDetailsManager.createUser(adminUser);
+        jdbcUserDetailsManager.createUser(testUser);
+
+        return jdbcUserDetailsManager;
+    }
+
+
 
     /*
         Execute DDL script at start up to get USERS and AUTHORITIES Tables
@@ -182,7 +234,7 @@ public class JwtSecurityConfig {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 // Denna ger = public static final String DEFAULT_USER_SCHEMA_DDL_LOCATION = "org/springframework/security/core/userdetails/jdbc/users.ddl";
-                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+                //.addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
                 .build();
     }
 
